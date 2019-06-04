@@ -66,7 +66,8 @@ function getNews(query, maxResults=10) {
 
   console.log(url);
 
-// why this part is not working??
+// why this part is not working?? probably because the server does not support preflight CORS requests...? https://stackoverflow.com/questions/49967188/using-fetch-with-authorization-header-and-cors
+
 //   const options = {
 //     headers: new Headers({
 //         "X-Api-Key": apiKey})
