@@ -12,13 +12,13 @@ function formatQueryParams(params) {
 }
 
 function addressMerge(addressObj){
-        const addressString = `Type: ${addressObj.type}
-        line 1: ${addressObj.line1}
-        Line 2: ${addressObj.line2}
-        Line 3: ${addressObj.line3}
-        City: ${addressObj.city}
-        State: ${addressObj.stateCode}
-        Postal Code: ${addressObj.postalCode}`
+        const addressString = `Type: ${addressObj.type}<br>
+        line 1: ${addressObj.line1}<br>
+        Line 2: ${addressObj.line2}<br>
+        Line 3: ${addressObj.line3}<br>
+        City: ${addressObj.city}<br>
+        State: ${addressObj.stateCode}<br>
+        Postal Code: ${addressObj.postalCode}<br>`
         return addressString;
     }
 
@@ -26,12 +26,11 @@ function addressArrMerge(addressArr){
     let addressTotalArr = []
     let addressHtml = ""
     for (let i = 0; i < addressArr.length; i++){
-        let addressDetail = addressMerge(addressArr[i]);
-        addressTotalArr.push(`Address ${i+1}`);
-        addressTotalArr.push(addressDetail);
+        addressTotalArr.push(`Address ${i+1}<br>`);
+        addressTotalArr.push(addressMerge(addressArr[i]));
         addressTotalArr.push(`\n<br>`)
     }
-    addressHtml = addressTotalArr.join("<br><br>")
+    addressHtml = addressTotalArr.join("")
     return addressHtml;
 }
 
@@ -46,13 +45,13 @@ function displayResults(responseJson, maxResults) {
     //list with the article title, source, author,
     //description, and image
     $('#results-list').append(
-      `<li><h3>${responseJson.data[i].title}</h3>
+      `<li><h3>${responseJson.data[i].fullName}</h3>
       <p>${addressArrMerge(responseJson.data[i].addresses)}</p>
-      <p>${responseJson.articles[i].description}</p>
+      <p>${responseJson.data[i].description}</p>
       <a href="${responseJson.data[i].url}">${responseJson.data[i].url}</a>
       </li>`
     )};
-  //display the results section  
+  //display the results section 
   $('#results').removeClass('hidden');
 };
 
@@ -63,16 +62,17 @@ function getNews(query, maxResults=10) {
     fields: "addresses"
   };
   const queryString = formatQueryParams(params)
-  const url = searchURL + '?' + queryString;
+  const url = searchURL + '?' + queryString + '&api_key=' + apiKey;
 
   console.log(url);
 
-  const options = {
-    headers: new Headers({
-      "X-Api-Key": apiKey})
-  };
+// why this part is not working??
+//   const options = {
+//     headers: new Headers({
+//         "X-Api-Key": apiKey})
+//   };
 
-  fetch(url, options)
+  fetch(url)
     .then(response => {
       if (response.ok) {
         return response.json();
